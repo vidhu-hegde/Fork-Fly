@@ -1,0 +1,17 @@
+{
+  "name": "fork-and-fly",
+  "version": "1.0.0",
+  "description": "Food discovery tool for travelers using Memories.ai video search and Anthropic Claude.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npx vercel dev"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

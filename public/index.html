@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fork & Fly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f0d09;
+        --bg-soft: #17130e;
+        --panel: rgba(24, 19, 13, 0.92);
+        --panel-strong: #1c1610;
+        --text: #f5edd8;
+        --muted: #c7bda5;
+        --accent: #e8622a;
+        --accent-soft: rgba(232, 98, 42, 0.18);
+        --amber: #f0a030;
+        --amber-soft: rgba(240, 160, 48, 0.18);
+        --line: rgba(245, 237, 216, 0.08);
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+        --radius-md: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "DM Sans", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top center, rgba(232, 98, 42, 0.22), transparent 24rem),
+          linear-gradient(180deg, #140f0a 0%, var(--bg) 35%, #090806 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -10rem -15rem auto;
+        height: 24rem;
+        background:
+          radial-gradient(circle at center, rgba(232, 98, 42, 0.42), rgba(232, 98, 42, 0.08) 45%, transparent 72%);
+        filter: blur(28px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .shell {
+        position: relative;
+        z-index: 1;
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2rem 0 5rem;
+      }
+
+      .hero {
+        padding: 3rem 0 2rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.45rem 0.8rem;
+        border: 1px solid rgba(240, 160, 48, 0.24);
+        border-radius: 999px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.02);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 0.78rem;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--amber));
+        box-shadow: 0 0 12px rgba(232, 98, 42, 0.7);
+      }
+
+      h1,
+      h2,
+      h3,
+      .serif {
+        font-family: "Fraunces", serif;
+      }
+
+      h1 {
+        margin: 1.25rem 0 1rem;
+        max-width: 11ch;
+        font-size: clamp(3.3rem, 9vw, 6.4rem);
+        line-height: 0.95;
+        font-weight: 600;
+        letter-spacing: -0.04em;
+      }
+
+      h1 em {
+        font-style: italic;
+        color: #ffd6b1;
+      }
+
+      .hero-copy {
+        max-width: 42rem;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+
+      .form-card,
+      .guide-card,
+      .videos-card,
+      .loading-card,
+      .error-card {
+        position: relative;
+        overflow: hidden;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+      }
+
+      .form-card {
+        margin-top: 2.5rem;
+        padding: 1.5rem;
+      }
+
+      .form-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, rgba(232, 98, 42, 0.9), rgba(240, 160, 48, 0.95));
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .field label,
+      .section-label {
+        color: #e7d7b8;
+        font-size: 0.92rem;
+        font-weight: 500;
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        border: 1px solid rgba(245, 237, 216, 0.1);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        padding: 0.95rem 1rem;
+        outline: none;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      input[type="text"]:focus,
+      select:focus {
+        border-color: rgba(240, 160, 48, 0.55);
+        transform: translateY(-1px);
+      }
+
+      .double {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+      }
+
+      .pill {
+        border: 1px solid rgba(245, 237, 216, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .pill:hover {
+        border-color: rgba(240, 160, 48, 0.35);
+        color: var(--text);
+      }
+
+      .pill.active {
+        color: var(--text);
+        border-color: rgba(240, 160, 48, 0.5);
+        background: linear-gradient(180deg, rgba(240, 160, 48, 0.2), rgba(232, 98, 42, 0.18));
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      }
+
+      .submit-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 0.25rem;
+      }
+
+      .subtle-note {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .primary-btn,
+      .copy-btn {
+        border: none;
+        cursor: pointer;
+      }
+
+      .primary-btn {
+        padding: 1rem 1.4rem;
+        border-radius: 999px;
+        color: #1b120c;
+        background: linear-gradient(135deg, var(--amber), #ffcf79 45%, #ff9b52 100%);
+        font-family: "Fraunces", serif;
+        font-size: 1.15rem;
+        font-style: italic;
+        box-shadow: 0 18px 40px rgba(240, 160, 48, 0.18);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 50px rgba(240, 160, 48, 0.24);
+      }
+
+      .primary-btn:disabled {
+        opacity: 0.7;
+        cursor: progress;
+      }
+
+      .state-stack {
+        display: grid;
+        gap: 1.4rem;
+        margin-top: 1.8rem;
+      }
+
+      .loading-card,
+      .error-card {
+        padding: 1.4rem;
+      }
+
+      .loading-head,
+      .error-head {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1rem;
+      }
+
+      .spinner {
+        width: 1.15rem;
+        height: 1.15rem;
+        border-radius: 50%;
+        border: 2px solid rgba(245, 237, 216, 0.18);
+        border-top-color: var(--amber);
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-title {
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-size: 1.2rem;
+      }
+
+      .log-list {
+        display: grid;
+        gap: 0.65rem;
+      }
+
+      .log-line {
+        padding: 0.75rem 0.9rem;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        border: 1px solid rgba(245, 237, 216, 0.06);
+      }
+
+      .error-card {
+        border-color: rgba(232, 98, 42, 0.28);
+        background: linear-gradient(180deg, rgba(232, 98, 42, 0.14), rgba(24, 19, 13, 0.96));
+      }
+
+      .error-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: rgba(232, 98, 42, 0.18);
+        color: #ffb793;
+        font-weight: 700;
+      }
+
+      .results {
+        display: grid;
+        gap: 1.4rem;
+      }
+
+      .videos-card {
+        padding: 1.35rem;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 600;
+      }
+
+      .section-copy {
+        color: var(--muted);
+        max-width: 34rem;
+      }
+
+      .video-row {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(260px, 320px);
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        scroll-snap-type: x proximity;
+      }
+
+      .video-card {
+        display: grid;
+        gap: 0.85rem;
+        padding: 0.9rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(245, 237, 216, 0.06);
+        scroll-snap-align: start;
+      }
+
+      .video-thumb {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(232, 98, 42, 0.22), rgba(240, 160, 48, 0.14));
+        object-fit: cover;
+      }
+
+      .video-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
+      .video-title {
+        font-weight: 500;
+        line-height: 1.45;
+      }
+
+      .platform-badge,
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .platform-youtube {
+        background: rgba(255, 71, 71, 0.18);
+        color: #ff8d8d;
+      }
+
+      .platform-tiktok {
+        background: rgba(255, 255, 255, 0.1);
+        color: #faf6ea;
+      }
+
+      .platform-instagram {
+        background: rgba(228, 64, 95, 0.18);
+        color: #ff9cb1;
+      }
+
+      .platform-twitter {
+        background: rgba(93, 169, 255, 0.16);
+        color: #9fd2ff;
+      }
+
+      .video-stats {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .guide-card {
+        overflow: hidden;
+      }
+
+      .guide-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.3rem 1.5rem;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+        border-bottom: 1px solid rgba(245, 237, 216, 0.08);
+      }
+
+      .guide-kicker {
+        color: #f2b05b;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+      }
+
+      .guide-head h2 {
+        margin: 0.35rem 0 0.3rem;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 0.95;
+      }
+
+      .guide-tagline {
+        margin: 0;
+        color: #f2e4c7;
+        font-family: "Fraunces", serif;
+        font-style: italic;
+        font-size: 1.08rem;
+      }
+
+      .copy-btn {
+        padding: 0.8rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border: 1px solid rgba(245, 237, 216, 0.1);
+      }
+
+      .guide-body {
+        display: grid;
+        gap: 1.75rem;
+        padding: 1.5rem;
+      }
+
+      .guide-section h3 {
+        margin: 0 0 1rem;
+        font-size: 1.45rem;
+      }
+
+      .dishes-grid,
+      .neighborhood-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .dishes-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .dish-card,
+      .hood-card {
+        padding: 1rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(245, 237, 216, 0.06);
+      }
+
+      .dish-emoji {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .dish-name,
+      .hood-name {
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+
+      .dish-where,
+      .hood-copy {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .spot-list {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .spot-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(245, 237, 216, 0.06);
+      }
+
+      .spot-rank {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-family: "Fraunces", serif;
+        background: linear-gradient(135deg, rgba(240, 160, 48, 0.24), rgba(232, 98, 42, 0.2));
+        color: #ffd8ab;
+      }
+
+      .spot-name {
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+      }
+
+      .spot-desc {
+        color: var(--muted);
+        line-height: 1.55;
+        margin-bottom: 0.6rem;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .tag {
+        background: rgba(240, 160, 48, 0.12);
+        color: #f7c57c;
+        font-weight: 500;
+      }
+
+      .neighborhood-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .best-for {
+        margin-top: 0.75rem;
+        color: #efc17b;
+      }
+
+      .timeline {
+        position: relative;
+        display: grid;
+        gap: 1rem;
+        padding-left: 1.2rem;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0.4rem;
+        bottom: 0.4rem;
+        left: 0.3rem;
+        width: 2px;
+        background: linear-gradient(180deg, rgba(240, 160, 48, 0.7), rgba(232, 98, 42, 0.1));
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 1.15rem;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -0.08rem;
+        top: 0.25rem;
+        width: 0.8rem;
+        height: 0.8rem;
+        border-radius: 50%;
+        background: var(--amber);
+        box-shadow: 0 0 0 4px rgba(240, 160, 48, 0.12);
+      }
+
+      .time-label {
+        color: #f4c47b;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .timeline-spot {
+        font-weight: 700;
+        margin: 0.2rem 0 0.2rem;
+      }
+
+      .timeline-note {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .tips-list {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .tip-item {
+        padding: 0.85rem 1rem;
+        border-left: 3px solid rgba(240, 160, 48, 0.7);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .note-banner {
+        margin: 0 1.5rem;
+        padding: 0.9rem 1rem;
+        border-radius: 14px;
+        background: rgba(240, 160, 48, 0.12);
+        color: #f3d39a;
+        border: 1px solid rgba(240, 160, 48, 0.14);
+      }
+
+      .empty-videos {
+        padding: 0.8rem 0;
+        color: var(--muted);
+      }
+
+      @media (max-width: 900px) {
+        .dishes-grid,
+        .neighborhood-grid,
+        .double {
+          grid-template-columns: 1fr;
+        }
+
+        .guide-head,
+        .submit-row,
+        .section-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .shell {
+          width: min(100% - 1rem, 1120px);
+          padding-top: 1.1rem;
+        }
+
+        .form-card,
+        .guide-body,
+        .guide-head,
+        .videos-card,
+        .loading-card,
+        .error-card {
+          padding: 1rem;
+        }
+
+        h1 {
+          max-width: 9ch;
+        }
+
+        .video-row {
+          grid-auto-columns: minmax(250px, 86vw);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div class="eyebrow">Food discovery for your next trip</div>
+        <h1>Eat your way through <em>anywhere</em>.</h1>
+        <p class="hero-copy">
+          Fork &amp; Fly searches real creator videos across YouTube, TikTok, Instagram,
+          and X, then turns them into a focused food guide for the destination you’re about to visit.
+        </p>
+
+        <section class="form-card">
+          <form id="search-form" class="form-grid">
+            <div class="field">
+              <label for="destination">Destination</label>
+              <input
+                id="destination"
+                name="destination"
+                type="text"
+                placeholder="Tokyo, Oaxaca, New Orleans..."
+                autocomplete="off"
+                required
+              />
+            </div>
+
+            <div class="double">
+              <div class="field">
+                <label for="budget">Budget</label>
+                <select id="budget" name="budget">
+                  <option value="all">All budgets</option>
+                  <option value="casual">Street food &amp; casual</option>
+                  <option value="midrange">Mid-range restaurants</option>
+                  <option value="splurge">Fine dining &amp; splurges</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="recency">Video recency</label>
+                <select id="recency" name="recency">
+                  <option value="past_week">Past week</option>
+                  <option value="past_month">Past month</option>
+                  <option value="past_3_months">Past 3 months</option>
+                  <option value="past_year" selected>Past year</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="section-label">Food focus</div>
+              <div id="focus-pills" class="pill-row">
+                <button type="button" class="pill" data-group="focus" data-value="Local dishes">Local dishes</button>
+                <button type="button" class="pill" data-group="focus" data-value="Street food">Street food</button>
+                <button type="button" class="pill" data-group="focus" data-value="Hidden gems">Hidden gems</button>
+                <button type="button" class="pill" data-group="focus" data-value="Markets">Markets</button>
+                <button type="button" class="pill" data-group="focus" data-value="Desserts">Desserts</button>
+                <button type="button" class="pill" data-group="focus" data-value="Vegetarian">Vegetarian</button>
+                <button type="button" class="pill" data-group="focus" data-value="Seafood">Seafood</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="section-label">Platforms</div>
+              <div id="platform-pills" class="pill-row">
+                <button type="button" class="pill active" data-group="platform" data-value="youtube">YouTube</button>
+                <button type="button" class="pill active" data-group="platform" data-value="tiktok">TikTok</button>
+                <button type="button" class="pill active" data-group="platform" data-value="instagram">Instagram</button>
+                <button type="button" class="pill" data-group="platform" data-value="twitter">X/Twitter</button>
+              </div>
+            </div>
+
+            <div class="submit-row">
+              <div class="subtle-note">Creator signals first, guide second. At least one platform is required.</div>
+              <button id="submit-btn" class="primary-btn" type="submit">Find food →</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="state-stack" class="state-stack" aria-live="polite"></section>
+      </section>
+    </main>
+
+    <script>
+      const focusSelection = new Set();
+      const platformSelection = new Set(["youtube", "tiktok", "instagram"]);
+
+      const form = document.getElementById("search-form");
+      const stateStack = document.getElementById("state-stack");
+      const submitButton = document.getElementById("submit-btn");
+
+      let logTimer = null;
+      let fallbackLogIndex = 0;
+
+      document.querySelectorAll(".pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          const { group, value } = pill.dataset;
+          const set = group === "platform" ? platformSelection : focusSelection;
+
+          if (group === "platform" && pill.classList.contains("active") && set.size === 1) {
+            return;
+          }
+
+          if (pill.classList.contains("active")) {
+            pill.classList.remove("active");
+            set.delete(value);
+          } else {
+            pill.classList.add("active");
+            set.add(value);
+          }
+        });
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const destination = document.getElementById("destination").value.trim();
+        const budget = document.getElementById("budget").value;
+        const recency = document.getElementById("recency").value;
+
+        if (!destination) {
+          renderError("Enter a destination to build the guide.");
+          return;
+        }
+
+        if (platformSelection.size === 0) {
+          renderError("Select at least one platform before searching.");
+          return;
+        }
+
+        clearState();
+        setLoading(true);
+        renderLoading(destination);
+
+        try {
+          const response = await fetch("/api/search", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              destination,
+              budget,
+              recency,
+              focus: Array.from(focusSelection),
+              platforms: Array.from(platformSelection),
+            }),
+          });
+
+          const payload = await response.json();
+
+          if (!response.ok) {
+            throw new Error(payload.error || "Unable to build the guide right now.");
+          }
+
+          renderResults(destination, payload);
+        } catch (error) {
+          renderError(error.message || "Unable to build the guide right now.");
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      function setLoading(isLoading) {
+        submitButton.disabled = isLoading;
+        submitButton.textContent = isLoading ? "Finding food…" : "Find food →";
+      }
+
+      function clearState() {
+        stopLogTicker();
+        stateStack.innerHTML = "";
+      }
+
+      function renderLoading(destination) {
+        const steps = [
+          `Searching creator videos for ${destination}`,
+          "Filtering for practical food recs and neighborhoods",
+          "Pulling dish and spot signals from the video set",
+          "Asking Claude to shape the final guide",
+        ];
+
+        fallbackLogIndex = 1;
+        stateStack.innerHTML = `
+          <section class="loading-card">
+            <div class="loading-head">
+              <div class="spinner" aria-hidden="true"></div>
+              <div class="loading-title">Hunting for food content…</div>
+            </div>
+            <div id="log-list" class="log-list">
+              <div class="log-line">${steps[0]}</div>
+            </div>
+          </section>
+        `;
+
+        logTimer = window.setInterval(() => {
+          const logList = document.getElementById("log-list");
+          if (!logList) {
+            stopLogTicker();
+            return;
+          }
+
+          const nextLine = steps[Math.min(fallbackLogIndex, steps.length - 1)];
+          const line = document.createElement("div");
+          line.className = "log-line";
+          line.textContent = nextLine;
+          logList.appendChild(line);
+          fallbackLogIndex += 1;
+
+          if (fallbackLogIndex >= steps.length) {
+            stopLogTicker();
+          }
+        }, 1200);
+      }
+
+      function stopLogTicker() {
+        if (logTimer) {
+          window.clearInterval(logTimer);
+          logTimer = null;
+        }
+      }
+
+      function renderResults(destination, payload) {
+        stopLogTicker();
+
+        const guide = payload.guide || {};
+        const videos = Array.isArray(payload.videos) ? payload.videos : [];
+        const note = payload.note;
+
+        const videosHtml = videos.length
+          ? videos.map(renderVideoCard).join("")
+          : `<div class="empty-videos">No source videos came back for this search, so the guide below leans on general food knowledge.</div>`;
+
+        stateStack.innerHTML = `
+          <section class="results">
+            <section class="videos-card">
+              <div class="section-head">
+                <div>
+                  <h2>Source videos</h2>
+                  <div class="section-copy">Real creator videos found for ${escapeHtml(destination)}.</div>
+                </div>
+              </div>
+              <div class="video-row">${videosHtml}</div>
+            </section>
+
+            <section class="guide-card">
+              <div class="guide-head">
+                <div>
+                  <div class="guide-kicker">Food guide</div>
+                  <h2>${escapeHtml(guide.destination || destination)}</h2>
+                  <p class="guide-tagline">${escapeHtml(guide.tagline || "")}</p>
+                </div>
+                <button class="copy-btn" type="button" id="copy-guide">Copy guide</button>
+              </div>
+              ${note ? `<div class="note-banner">${escapeHtml(note)}</div>` : ""}
+              <div class="guide-body">
+                <section class="guide-section">
+                  <h3>Must-eat dishes</h3>
+                  <div class="dishes-grid">${(guide.dishes || []).map(renderDishCard).join("")}</div>
+                </section>
+
+                <section class="guide-section">
+                  <h3>Top spots pulled from videos</h3>
+                  <div class="spot-list">${(guide.spots || []).map(renderSpotItem).join("")}</div>
+                </section>
+
+                <section class="guide-section">
+                  <h3>Neighborhoods to eat in</h3>
+                  <div class="neighborhood-grid">${(guide.neighborhoods || []).map(renderNeighborhoodCard).join("")}</div>
+                </section>
+
+                <section class="guide-section">
+                  <h3>One perfect food day</h3>
+                  <div class="timeline">${(guide.day_plan || []).map(renderTimelineItem).join("")}</div>
+                </section>
+
+                <section class="guide-section">
+                  <h3>Insider tips from creators</h3>
+                  <div class="tips-list">${(guide.tips || []).map(renderTipItem).join("")}</div>
+                </section>
+              </div>
+            </section>
+          </section>
+        `;
+
+        const copyButton = document.getElementById("copy-guide");
+        if (copyButton) {
+          copyButton.addEventListener("click", async () => {
+            const text = buildGuideCopy(destination, guide);
+            try {
+              await navigator.clipboard.writeText(text);
+              copyButton.textContent = "Copied";
+              window.setTimeout(() => {
+                copyButton.textContent = "Copy guide";
+              }, 1600);
+            } catch {
+              copyButton.textContent = "Copy failed";
+              window.setTimeout(() => {
+                copyButton.textContent = "Copy guide";
+              }, 1600);
+            }
+          });
+        }
+      }
+
+      function renderError(message) {
+        stopLogTicker();
+        stateStack.innerHTML = `
+          <section class="error-card">
+            <div class="error-head">
+              <div class="error-badge">!</div>
+              <div>
+                <div class="loading-title">Search failed</div>
+                <div class="section-copy">Fork &amp; Fly couldn’t finish building the guide.</div>
+              </div>
+            </div>
+            <div class="log-line">${escapeHtml(message)}</div>
+          </section>
+        `;
+      }
+
+      function renderVideoCard(video) {
+        const badgeClass = `platform-${video.platform || "unknown"}`;
+        const url = video.url || "#";
+        const thumb = video.thumbnail
+          ? `<img class="video-thumb" src="${escapeAttribute(video.thumbnail)}" alt="${escapeAttribute(video.title || "Source video thumbnail")}" loading="lazy" />`
+          : `<div class="video-thumb"></div>`;
+
+        return `
+          <a class="video-card" href="${escapeAttribute(url)}" target="_blank" rel="noreferrer noopener">
+            ${thumb}
+            <div class="video-title">${escapeHtml(video.title || "Untitled video")}</div>
+            <div class="video-meta">
+              <span class="platform-badge ${badgeClass}">${escapeHtml(prettyPlatform(video.platform))}</span>
+              <span class="video-stats">${escapeHtml(formatViews(video.viewCount))}</span>
+            </div>
+          </a>
+        `;
+      }
+
+      function renderDishCard(dish) {
+        return `
+          <article class="dish-card">
+            <div class="dish-emoji">${escapeHtml(dish.emoji || "🍽️")}</div>
+            <div class="dish-name">${escapeHtml(dish.name || "Signature dish")}</div>
+            <div class="dish-where">${escapeHtml(dish.where || "Across the city")}</div>
+          </article>
+        `;
+      }
+
+      function renderSpotItem(spot, index) {
+        const tags = Array.isArray(spot.tags) ? spot.tags : [];
+        return `
+          <article class="spot-item">
+            <div class="spot-rank">${index + 1}</div>
+            <div>
+              <div class="spot-name">${escapeHtml(spot.name || "Standout spot")}</div>
+              <div class="spot-desc">${escapeHtml(spot.description || "Worth seeking out.")}</div>
+              <div class="tag-row">${tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}</div>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderNeighborhoodCard(neighborhood) {
+        return `
+          <article class="hood-card">
+            <div class="hood-name">${escapeHtml(neighborhood.name || "Food district")}</div>
+            <div class="hood-copy">${escapeHtml(neighborhood.description || "Packed with solid options.")}</div>
+            <div class="best-for">Best for: ${escapeHtml(neighborhood.best_for || "Trying a little of everything")}</div>
+          </article>
+        `;
+      }
+
+      function renderTimelineItem(item) {
+        return `
+          <article class="timeline-item">
+            <div class="time-label">${escapeHtml(item.time || "Anytime")}</div>
+            <div class="timeline-spot">${escapeHtml(item.spot || "Flexible stop")}</div>
+            <div class="timeline-note">${escapeHtml(item.note || "Build around what you crave most.")}</div>
+          </article>
+        `;
+      }
+
+      function renderTipItem(tip) {
+        return `<div class="tip-item">${escapeHtml(tip || "Go where the lines are moving fast.")}</div>`;
+      }
+
+      function buildGuideCopy(destination, guide) {
+        const sections = [
+          `Fork & Fly: ${guide.destination || destination}`,
+          guide.tagline || "",
+          "",
+          "Must-eat dishes:",
+          ...(guide.dishes || []).map((dish) => `- ${dish.emoji || "🍽️"} ${dish.name}: ${dish.where}`),
+          "",
+          "Top spots:",
+          ...(guide.spots || []).map((spot, index) => `- ${index + 1}. ${spot.name}: ${spot.description} [${(spot.tags || []).join(", ")}]`),
+          "",
+          "Neighborhoods:",
+          ...(guide.neighborhoods || []).map((hood) => `- ${hood.name}: ${hood.description} Best for ${hood.best_for}`),
+          "",
+          "One perfect food day:",
+          ...(guide.day_plan || []).map((entry) => `- ${entry.time}: ${entry.spot} — ${entry.note}`),
+          "",
+          "Insider tips:",
+          ...(guide.tips || []).map((tip) => `- ${tip}`),
+        ];
+
+        return sections.join("\n");
+      }
+
+      function formatViews(value) {
+        if (!value || Number.isNaN(Number(value))) {
+          return "Views unavailable";
+        }
+        return `${Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(Number(value))} views`;
+      }
+
+      function prettyPlatform(platform) {
+        const labels = {
+          youtube: "YouTube",
+          tiktok: "TikTok",
+          instagram: "Instagram",
+          twitter: "X/Twitter",
+          unknown: "Unknown",
+        };
+        return labels[platform] || platform || "Unknown";
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function escapeAttribute(value) {
+        return escapeHtml(value).replaceAll("`", "&#96;");
+      }
+    </script>
+  </body>
+</html>
