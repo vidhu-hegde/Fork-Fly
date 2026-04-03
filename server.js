@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const express = require("express");
 const dotenv = require("dotenv");
 const path = require("path");
@@ -16,13 +17,45 @@ app.get("/", (_req, res) => {
 });
 
 app.post("/api/search", async (req, res) => {
+  const requestId = crypto.randomUUID();
+  const startedAt = Date.now();
+  res.setHeader("X-Request-Id", requestId);
+
   try {
-    const result = await handleSearchRequest(req.body || {});
-    return res.json(result);
+    console.log(`[fork-and-fly:${requestId}] /api/search received`, {
+      destination:
+        typeof req.body?.destination === "string" ? req.body.destination : null,
+      platformCount: Array.isArray(req.body?.platforms)
+        ? req.body.platforms.length
+        : 0,
+      focusCount: Array.isArray(req.body?.focus) ? req.body.focus.length : 0,
+      recency: req.body?.recency || null,
+    });
+
+    const result = await handleSearchRequest(req.body || {}, {
+      requestId,
+      logger: console,
+    });
+
+    console.log(`[fork-and-fly:${requestId}] /api/search success`, {
+      durationMs: Date.now() - startedAt,
+      videoCount: result.videos.length,
+      hasGuide: Boolean(result.guide),
+    });
+
+    return res.json({ ...result, requestId });
   } catch (error) {
     const status = error.statusCode || 500;
+    console.error(`[fork-and-fly:${requestId}] /api/search failed`, {
+      status,
+      durationMs: Date.now() - startedAt,
+      error: error.message || "Unknown error",
+      stack: error.stack,
+    });
+
     return res.status(status).json({
       error: error.message || "Something went wrong while building the guide.",
+      requestId,
     });
   }
 });
