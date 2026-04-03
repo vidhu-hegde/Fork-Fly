@@ -83,9 +83,12 @@
       }
 
       .brand-mark {
-        position: absolute;
-        top: 2rem;
-        right: 0;
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+      }
+
+      .brand-pill {
         display: inline-flex;
         align-items: center;
         gap: 0.55rem;
@@ -100,7 +103,7 @@
         letter-spacing: -0.04em;
       }
 
-      .brand-mark::before {
+      .brand-pill::before {
         content: "";
         width: 0.45rem;
         height: 0.45rem;
@@ -109,7 +112,7 @@
         box-shadow: 0 0 12px rgba(232, 98, 42, 0.7);
       }
 
-      .brand-mark em {
+      .brand-pill em {
         color: #ffd6b1;
         font-style: italic;
       }
@@ -699,7 +702,6 @@
         }
 
         .brand-mark {
-          position: static;
           margin-bottom: 2rem;
         }
 
@@ -724,7 +726,9 @@
   </head>
   <body>
     <main class="shell">
-      <a class="brand-mark" href="/">Fork &amp; <em>Fly</em></a>
+      <div class="brand-mark">
+        <a class="brand-pill" href="/">Fork &amp; <em>Fly</em></a>
+      </div>
       <section class="hero">
         <h1>Eat your way through <em>anywhere</em>.</h1>
         <p class="hero-copy">
