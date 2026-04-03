@@ -82,27 +82,36 @@
         padding: 3rem 0 2rem;
       }
 
-      .eyebrow {
+      .brand-mark {
+        position: absolute;
+        top: 2rem;
+        right: 0;
         display: inline-flex;
         align-items: center;
         gap: 0.55rem;
-        padding: 0.45rem 0.8rem;
+        padding: 0.6rem 0.95rem;
         border: 1px solid rgba(240, 160, 48, 0.24);
         border-radius: 999px;
-        color: var(--muted);
+        color: var(--text);
         background: rgba(255, 255, 255, 0.02);
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        font-size: 0.78rem;
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: -0.04em;
       }
 
-      .eyebrow::before {
+      .brand-mark::before {
         content: "";
         width: 0.45rem;
         height: 0.45rem;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--accent), var(--amber));
         box-shadow: 0 0 12px rgba(232, 98, 42, 0.7);
+      }
+
+      .brand-mark em {
+        color: #ffd6b1;
+        font-style: italic;
       }
 
       h1,
@@ -689,6 +698,11 @@
           padding-top: 1.1rem;
         }
 
+        .brand-mark {
+          position: static;
+          margin-bottom: 2rem;
+        }
+
         .form-card,
         .guide-body,
         .guide-head,
@@ -710,8 +724,8 @@
   </head>
   <body>
     <main class="shell">
+      <a class="brand-mark" href="/">Fork &amp; <em>Fly</em></a>
       <section class="hero">
-        <div class="eyebrow">Food discovery for your next trip</div>
         <h1>Eat your way through <em>anywhere</em>.</h1>
         <p class="hero-copy">
           Fork &amp; Fly searches real creator videos across YouTube, TikTok, Instagram,
