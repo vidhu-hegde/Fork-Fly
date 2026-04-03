@@ -1,17 +1,21 @@
 # Fork & Fly
 
-Fork & Fly is a food discovery app for travelers. The frontend is a static page in `public/`, and the backend search flow is available both as a local Express route and as a Vercel serverless function in `api/search.js`.
+Fork & Fly is a food discovery app for travelers.
 
-## Local setup
+Enter a destination, pick the platforms and food style you care about, and the app finds real food videos from Memories.ai and turns them into a travel food guide using Anthropic Claude.
 
-1. Install Node.js 18 or newer.
-2. Install dependencies:
+Live app: https://fork-fly.vercel.app/
+
+## Run locally
+
+1. Install Node.js 18+
+2. Install dependencies
 
 ```bash
 npm install
 ```
 
-3. Add your API keys to `.env`:
+3. Create a `.env` file in the project root
 
 ```env
 MEMORIES_API_KEY=your_key_here
@@ -19,54 +23,43 @@ ANTHROPIC_API_KEY=your_key_here
 PORT=3000
 ```
 
-4. Run locally with either option:
+4. Start the app
 
 ```bash
 npm start
 ```
 
-or
+5. Open `http://localhost:3000`
 
-```bash
-npm run dev
-```
+## Deploy on Vercel
 
-5. Open `http://localhost:3000`.
+1. Push this repo to GitHub
+2. Import the repo in Vercel
+3. Add these Environment Variables in Vercel Project Settings
 
-## Deploy to Vercel
-
-1. Push this project to GitHub.
-2. Import the repo into Vercel.
-3. In Vercel project settings, add:
-
-```env
+```text
 MEMORIES_API_KEY=your_key_here
 ANTHROPIC_API_KEY=your_key_here
 ```
 
-4. Deploy.
-
-Vercel serves [public/index.html](/Users/vidhatrihegde/Fork%20&%20Fly/public/index.html) at `/` and runs [api/search.js](/Users/vidhatrihegde/Fork%20&%20Fly/api/search.js) for `/api/search`.
+4. Deploy the project
 
 ## Project structure
 
 ```text
-fork-and-fly/
-├── api/
-│   └── search.js
-├── lib/
-│   └── fork-and-fly.js
-├── public/
-│   └── index.html
-├── .env
-├── package.json
+.
+├── api/search.js
+├── lib/fork-and-fly.js
+├── public/index.html
 ├── server.js
-└── vercel.json
+├── package.json
+├── vercel.json
+└── README.md
 ```
 
 ## Notes
 
-- API keys stay server-side in local `.env` files or Vercel environment variables.
-- The browser only calls `/api/search`.
-- The shared backend logic lives in [lib/fork-and-fly.js](/Users/vidhatrihegde/Fork%20&%20Fly/lib/fork-and-fly.js).
-- [vercel.json](/Users/vidhatrihegde/Fork%20&%20Fly/vercel.json) sets the Vercel function max duration to 60 seconds.
+- API keys are never exposed in the browser
+- Frontend code is in `public/index.html`
+- Backend API route is `api/search.js`
+- Shared backend logic is in `lib/fork-and-fly.js`
