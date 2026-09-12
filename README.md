@@ -2,7 +2,9 @@
 
 (WHY? - I love food and wanted to explore MEMORIES.AI platform)
 
-Fork & Fly is a food discovery app for travelers.
+It is still in a development phase due to API issue
+
+Fork & Fly is a food discovery app for travelers. 
 
 Enter a destination, pick the platforms and food style you care about, and the app finds real food videos from Memories.ai and turns them into a travel food guide using Anthropic Claude.
 
